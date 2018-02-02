@@ -1,5 +1,7 @@
 package edu.wctc.dj.first;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -13,15 +15,22 @@ public class FirstServlet extends javax.servlet.http.HttpServlet {
 //        response.getOutputStream().println(html);
 
         //using a file reader
-        FileReader fileReader = new FileReader("file");
-        int ch;
-        String html2 = "";
-        while ((ch=fileReader.read())!=-1) html2 += fileReader.read();
-        // close the file
-        fileReader.close();
+        File file = new File("web" + File.separatorChar + "WEB-INF" + File.separatorChar + "file.txt");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
 
-        String html3 = "<html><body>" + html2;
-        response.getOutputStream().println(html3);
+            while (line != null) {
+                sb.append(line);
+                sb.append("\n");
+                line = br.readLine();
+            }
+            String htmlString = sb.toString();
+            response.getOutputStream().println(htmlString);
+        } finally {
+            br.close();
+        }
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
